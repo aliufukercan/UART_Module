@@ -48,5 +48,5 @@ This testbench tests our design by sending its receiver an 8 bit data and makes 
 In this testbench, we use our design to send an array of 13 element data. We check the falling edge of the busy signal to transmit the next data byte. As seen in the below image, the **UART_Tx** module transmits each data byte continuously and the **UART_Rx** module samples the transmitted datas and store them in registers **rx_data** and **received_data**.
 </br></br>
 
-![](SIM/tb_Array.png)
+![](https://github.com/aliufukercan/UART_Module/blob/master/SIM/tb_Array.PNG?raw=true)
 
