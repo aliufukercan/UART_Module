@@ -1,0 +1,10 @@
+UART_Module.cache
+UART_Module.hw
+UART_Module.ip_user_files
+UART_Module.runs
+UART_Module.sim
+UART_Module.srcs
+*.jou
+*.log
+*.str
+*.Xil
