@@ -12,6 +12,7 @@ baudgen | Sets the baudrate | clk_100MHz, rst | pulse_tx, pulse_rx
 UART_Tx | Transmits given data|clk, rst, tx_val, pulse_tx, tx_data (7:0)| tx, busy
 UART_Rx | Receives and stores data | clk, rst, pulse_rx, rx| rx_data (7:0), rx_val
 </br>
+
 ## 1.1 baudgen
 **baudgen** module is used for generating pulses which will be used in **UART_Tx** and **UART_Rx** modules. In our testbench we are using a 10 MHz clock (100 ns period) and from 115200 baudrate, our bits will have 8.68 usec period. From 10 MHz / 115200 Hz, we get 87. That means if we pass 87 clock cycles of 10 Mhz clock, that will be equal to 8.7 usec period. To improve the accuracy, we will be using a 100 MHz clock for only **baudgen** module, that way we will be able to pass 868 cyles of 100 MHz clock and that will be equal to 8.68 usec. 
 
