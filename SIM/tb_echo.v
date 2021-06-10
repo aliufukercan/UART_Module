@@ -19,6 +19,8 @@ reg tx_val1 = 0;
 wire [7:0] rx_data1;
 wire tx1,busy1,rx_val1;
 
+reg tx_val_temp = 0;
+
 always #(clk_period_ns/2) clk = ~clk;
 always #5 clk_100MHz = ~clk_100MHz; 
 
@@ -26,7 +28,7 @@ initial begin
 tx_data = 8'b10101100;
 end
 
-baudgen u0 (.clk(clk_100MHz),.rst(rst),.pulse_tx(pulse_tx),.pulse_rx(pulse_rx));
+baudgen u0 (.clk(clk),.rst(rst),.clk_100MHz(clk_100MHz),.tx_val(tx_val_temp),.pulse_tx(pulse_tx),.pulse_rx(pulse_rx));
 
 UART_Tx u1 (.clk(clk),.pulse_tx(pulse_tx),.rst(rst),.tx_val(tx_val),.tx_data(tx_data),.tx(tx),.busy(busy));
 
@@ -36,6 +38,15 @@ UART_Tx u3 (.clk(clk),.pulse_tx(pulse_tx),.rst(rst),.tx_val(tx_val1),.tx_data(rx
 
 UART_Rx u4 (.clk(clk),.pulse_rx(pulse_rx),.rst(rst),.rx(tx1),.rx_val(rx_val1),.rx_data(rx_data1));
 
+always @(tx_val)
+begin 
+  tx_val_temp = tx_val;
+end
+
+always @(tx_val1)
+begin 
+  tx_val_temp = tx_val1;
+end
 
 // Main Testing
 initial begin
@@ -45,12 +56,13 @@ rst=1;
 #1;
 rst=0;
 
-@(posedge pulse_tx);
-tx_val <= 1'b1;
+#20603;
+tx_val = 1'b1;
 #(clk_period_ns);
-tx_val <= 1'b0;
+tx_val = 1'b0;
 
 @(negedge busy); // Wait for busy signal's falling edge to send tx_val1.
+@(posedge clk_100MHz);
 tx_val1 <= 1'b1;
 #(clk_period_ns);
 tx_val1 <= 1'b0;

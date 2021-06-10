@@ -20,7 +20,7 @@ For transmitting the datas, we will create a pulse signal (**pulse_tx**) that is
 ## 1.2 UART_Tx
 This module uses 5 states to transmit an 8 bit data with start and stop bits.
 In **idle** state, in every rising edge of 10 MHz clock, it checks if a **tx_val** signal exists which is a signal to initiate data transmit given by the testbench.
-If there is a **tx_val** signal in any rising edge clock, then at the next clock edge, the state becomes **start**. To be able to sample the start bit at the receiver side, we will make the **start** state begin as the **pulse_tx** becomes high. So actually until the next **pulse_tx**, the module will continue sending high signal from its **tx** port.
+If there is a **tx_val** signal in any rising edge clock, the **baudgen** is reset and at the next clock edge, the state becomes **start**. 
 From this point to the **done** state, in order to begin executing the next state, the module will wait for the **pulse_tx** signal. 
 
 **Busy** signal will be high from the **start** state to the end of the **stop** state, so that we can observe and know when the **UART_Tx** is busy. In state **transmit_data**, we will begin transmitting our data. After sending 8 bits of data, the **stop** state will begin and the module will send high signal from its **tx** port until the next **pulse_tx**. 

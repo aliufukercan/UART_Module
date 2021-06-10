@@ -43,7 +43,7 @@ idle: begin
        bit_index <= 0;
        
        if (r_rx == 1'b0) // Start bit detected
-         state <= start;
+         state <= start;     
        else
          state <= idle; 
       end 
@@ -90,7 +90,7 @@ stop: begin // Stop bit =1
 
 default: begin
        
-         r_rx_data <= 8'b11111111; // To avoid errors, initially the module receives high signal from tx.
+         r_rx_data <= 8'b11111111; // To avoid errors
          rx_val <= 0;
          state <= idle;  
          end

@@ -49,12 +49,10 @@ idle: begin
 
 start: begin // Start bit = 0.
         
-        if (pulse_tx==1)
-         begin
           busy <= 1;
           tx <= 1'b0;
           state <= transmit_data;
-         end
+         
        end
        
 transmit_data: begin

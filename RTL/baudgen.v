@@ -3,7 +3,8 @@
 // It's high state and low state lengths can be adjusted with the parameters.
 
 module baudgen(
-    input clk,rst,
+    input clk,rst,clk_100MHz,
+    input tx_val,
     output reg pulse_tx,
     output reg pulse_rx
     );
@@ -14,6 +15,19 @@ integer counter_tx = 1, counter_rx = 1;
 parameter pulse_high_width = 10; // To match the 100 ns period of 10 MHz clock.
 parameter pulse_length = 868; // To match the 8.68 usec period of 115200 baudrate.
 
+// Reset baudgen every tx_val rising edge
+always @(posedge tx_val)
+begin 
+   counter_tx <= 1;
+   pulse_tx <= 1'b0;
+ 
+   counter_rx <= 1;
+   pulse_rx <= 1'b0;
+   pulse_rx_half <= 1;
+   stay_tx <= 0;
+   stay_rx <= 0;
+end 
+
 always @(posedge rst)
 begin 
  if (rst==1)
@@ -23,11 +37,14 @@ begin
    
    counter_rx <= 1;
    pulse_rx <= 1'b0;
+   pulse_rx_half <= 1;
+   stay_tx <= 0;
+   stay_rx <= 0;
   end
 end  
   
 //For pulse_tx.
-always @(posedge clk)
+always @(posedge clk_100MHz)
 begin
 
  if (stay_tx == 1) // High state.
@@ -52,7 +69,7 @@ end
 
 
 //For pulse_rx.
-always @(posedge clk)
+always @(posedge clk_100MHz)
 begin
  
  if (pulse_rx_half == 1)

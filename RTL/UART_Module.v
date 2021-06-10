@@ -10,7 +10,7 @@ module UART_Module(
     
 wire pulse_tx, pulse_rx;
 
-baudgen u1 (.clk(clk_100MHz),.rst(rst),.pulse_tx(pulse_tx),.pulse_rx(pulse_rx));
+baudgen u1 (.clk(clk),.clk_100MHz(clk_100MHz),.tx_val(tx_val),.rst(rst),.pulse_tx(pulse_tx),.pulse_rx(pulse_rx));
 
 UART_Tx u2 (.clk(clk),.pulse_tx(pulse_tx),.rst(rst),.tx_val(tx_val),.tx_data(tx_data),.tx(tx),.busy(busy));
 
