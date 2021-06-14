@@ -43,7 +43,10 @@ idle: begin
        bit_index <= 0;
        
        if (r_rx == 1'b0) // Start bit detected
-         state <= start;     
+        begin
+         state <= start;
+         rx_val <= 1'b1;
+        end       
        else
          state <= idle; 
       end 
@@ -53,17 +56,14 @@ start: begin // Check middle of start bit to make sure it is still low
         if (pulse_rx == 1)
          begin
           if (r_rx == 1'b0)
-           begin
             state <= receive_data;
-            rx_val <= 1'b1;
-           end
           else
             state <= idle; 
          end
         end
        
 receive_data: begin
-      
+      rx_val <= 1'b1;
       if (pulse_rx == 1)
        begin
         r_rx_data[bit_index] <= r_rx;
@@ -85,6 +85,7 @@ stop: begin // Stop bit =1
        if (pulse_rx == 1)
         begin
          state <= idle;
+         rx_val <= 1'b1;
         end
       end
 

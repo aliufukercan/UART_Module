@@ -6,9 +6,9 @@
 module tb_UART_Array();
 
 parameter clk_period_ns = 100;
-reg clk_100MHz = 0; // Will be used in baudgen
+reg clk_100MHz = 1; // Will be used in baudgen
 
-reg clk = 0, rst = 0, tx_val = 0;
+reg clk = 1, rst = 0, tx_val = 0;
 reg [7:0] tx_data [0:12];
 
 wire pulse_tx, pulse_rx;
@@ -41,7 +41,7 @@ initial begin
     data = 8'b11111111;
 end
 
-baudgen u0 (.clk(clk),.clk_100MHz(clk_100MHz),.rst(rst),.tx_val(tx_val),.pulse_tx(pulse_tx),.pulse_rx(pulse_rx));
+baudgen u0 (.clk(clk),.clk_100MHz(clk_100MHz),.rst(rst),.busy(busy),.rx_val(rx_val),.pulse_tx(pulse_tx),.pulse_rx(pulse_rx));
 
 UART_Tx u1 (.clk(clk),.pulse_tx(pulse_tx),.rst(rst),.tx_val(tx_val),.tx_data(data),.tx(tx),.busy(busy));
 
@@ -76,16 +76,19 @@ rst=1;
 #(clk_period_ns);
 rst=0;
 
-#50445;
-@(posedge clk_100MHz)
+repeat(500)
+begin
+@(posedge clk);
+end
+
 tx_val <= 1'b1;
 #(clk_period_ns);
 tx_val <= 1'b0;
 
+
 repeat(12)
 begin
     @(negedge busy); // Wait for busy signal's falling edge to send tx_val.
-    @(posedge clk_100MHz)
     tx_val <= 1'b1;
     #(clk_period_ns);
     tx_val <= 1'b0;
