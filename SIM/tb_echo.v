@@ -20,7 +20,6 @@ wire [7:0] rx_data1;
 wire tx1,busy1;
 wire rx_val1;
 
-reg tx_val_temp = 0;
 reg rx_val_temp = 0;
 reg busy_temp = 0;
 
@@ -29,8 +28,6 @@ always #5 clk_100MHz = ~clk_100MHz;
 
 initial begin
 tx_data = 8'b10101100;
-
- 
 end
 
 
@@ -44,17 +41,6 @@ UART_Tx u3 (.clk(clk),.pulse_tx(pulse_tx),.rst(rst),.tx_val(tx_val1),.tx_data(rx
 
 UART_Rx u4 (.clk(clk),.pulse_rx(pulse_rx),.rst(rst),.rx(tx1),.rx_val(rx_val1),.rx_data(rx_data1));
 
-//always @(tx_val)
-//begin 
-//  tx_val_temp = tx_val;
-  
-//end
-
-//always @(tx_val1)
-//begin 
-//  tx_val_temp = tx_val1;
-  
-//end
 
 always @(clk_100MHz)
 begin 
@@ -78,18 +64,16 @@ rst=1;
 #1;
 rst=0;
 
-repeat(120)
+repeat(130)
 begin
 @(posedge clk);
 end
 
 tx_val = 1'b1;
-#(clk_period_ns+50);
+#(clk_period_ns);
 tx_val = 1'b0;
 
 @(negedge busy); // Wait for busy signal's falling edge to send tx_val1.
-//@(posedge clk_100MHz);
-
 tx_val1 <= 1'b1;
 #(clk_period_ns);
 tx_val1 <= 1'b0;

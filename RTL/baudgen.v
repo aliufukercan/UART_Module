@@ -15,7 +15,7 @@ integer counter_tx = 1, counter_rx = 1;
 parameter pulse_high_width = 10; // To match the 100 ns period of 10 MHz clock.
 parameter pulse_length = 868; // To match the 8.68 usec period of 115200 baudrate.
 
-// Reset baudgen every tx_val rising edge
+// Reset baudgen pulse_tx every busy rising edge
 always @(posedge busy)
 begin 
    counter_tx <= 1;
@@ -23,6 +23,7 @@ begin
    stay_tx <= 0;
 end 
 
+// Reset baudgen pulse_rx every rx_val rising edge
 always @(posedge rx_val)
 begin 
    counter_rx <= 1;
@@ -50,7 +51,7 @@ end
 //For pulse_tx.
 always @(posedge clk_100MHz)
 begin
-  if (busy)
+  if (busy) // To create pulses only when it is busy.
     begin 
      if (stay_tx == 1) // High state.
       begin
@@ -78,7 +79,7 @@ end
 //For pulse_rx.
 always @(posedge clk_100MHz)
 begin
-  if (rx_val)
+  if (rx_val) // To create pulses only when it is rx_val.
    begin   
      if (pulse_rx_half == 1)
       begin
@@ -100,19 +101,21 @@ begin
         end
         counter_rx <= counter_rx + 1;
       end 
-     else begin
-      counter_rx <= counter_rx + 1;
-      if (counter_rx == pulse_length)
-       begin
-        pulse_rx <= ~pulse_rx;
-        stay_rx <= 1;
-        counter_rx <= 1;
-       end
-     end 
+     else 
+      begin
+       counter_rx <= counter_rx + 1;
+       if (counter_rx == pulse_length)
+        begin
+         pulse_rx <= ~pulse_rx;
+         stay_rx <= 1;
+         counter_rx <= 1;
+        end
+      end 
     end
   else
     pulse_rx <= 1'b0;  
 end 
+
 endmodule
 
 
