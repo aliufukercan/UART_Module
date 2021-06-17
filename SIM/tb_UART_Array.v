@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 // With this testbench, we send an array of data to design's
-// receiver form design's transmitter.
+// receiver from design's transmitter.
 
 module tb_UART_Array();
 
