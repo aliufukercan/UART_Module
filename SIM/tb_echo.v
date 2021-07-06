@@ -1,7 +1,11 @@
 `timescale 1ns / 1ps
 
-// With this testbench, we transmit a byte data to design's receiver
-// and make it to send that data back to us.
+/*
+Author: Ali Ufuk Ercan
+Description: With this testbench, we transmit a byte data to design's 
+receiver and make it to send that data back to us.
+Version: 1.3
+*/
 
 module tb_echo();
 
@@ -44,15 +48,12 @@ UART_Rx u4 (.clk(clk),.pulse_rx(pulse_rx),.rst(rst),.rx(tx1),.rx_val(rx_val1),.r
 
 always @(clk_100MHz)
 begin 
-  if (busy1)
-    begin
-      rx_val_temp <= rx_val1;
-      busy_temp <= busy1;
-    end
-  else
-    begin
-      rx_val_temp = rx_val;
-      busy_temp = busy;
+    if (busy1) begin
+        rx_val_temp <= rx_val1;
+        busy_temp <= busy1;
+    end else begin
+        rx_val_temp = rx_val;
+        busy_temp = busy;
     end
 end         
 

@@ -1,7 +1,11 @@
 `timescale 1ns / 1ps
 
-// With this testbench, we send an array of data to design's
-// receiver from design's transmitter.
+/*
+Author: Ali Ufuk Ercan
+Description: With this testbench, we send an array of data to design's 
+receiver from design's transmitter.
+Version: 1.3
+*/
 
 module tb_UART_Array();
 
@@ -52,11 +56,10 @@ UART_Rx u2 (.clk(clk),.pulse_rx(pulse_rx),.rst(rst),.rx(tx),.rx_val(rx_val),.rx_
  
 always @(posedge tx_val)
 begin
-  if (tx_val==1)
-   begin
-     data <= tx_data[n]; 
-     n <= n+1; 
-   end
+    if (tx_val==1) begin
+        data <= tx_data[n]; 
+        n <= n+1; 
+    end
 end
 
 // Store the received bytes in received_data to display better in the simulation.
